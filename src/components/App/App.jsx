@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix';
 import ContactsForm from '../ContactsForm';
 import ContactsList from '../ContactsList';
 import FilterSearch from '../FilterSearch';
@@ -13,9 +14,13 @@ export default class App extends Component {
 
   componentDidMount() {
     const contactsFromLc = localStorage.getItem('contacts');
-    const parsedKey = JSON.parse(contactsFromLc);
     if (contactsFromLc) {
-      this.setState({ contacts: parsedKey });
+      try {
+        const parsedKey = JSON.parse(contactsFromLc);
+        this.setState({ contacts: parsedKey });
+      } catch ({ message }) {
+        Notify.failure(message);
+      }
     }
   }
 
